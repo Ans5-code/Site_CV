@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anselme Philippeau - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff006e;
+            --secondary: #fb5607;
+            --accent: #00d9ff;
+            --purple: #8338ec;
+            --dark: #0a0a0a;
+            --bg: #f0f0f0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes glow { 0%, 100% { text-shadow: 0 0 10px rgba(255,0,110,0.5); } 50% { text-shadow: 0 0 30px rgba(255,0,110,0.8); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            animation: slideDown 0.6s ease;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-menu button {
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #1a1a1a;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-menu button::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s;
+        }
+
+        .nav-menu button:hover::after,
+        .nav-menu button.active::after {
+            width: 100%;
+        }
+
+        .page {
+            display: none;
+            animation: slideUp 0.8s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .hero {
+            background: linear-gradient(-45deg, #0a0a0a, #1a0033, #0a0a0a);
+            background-size: 300% 300%;
+            color: white;
+            padding: 100px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: gradient-shift 8s ease infinite;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,0,110,0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0,217,255,0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff006e, #00d9ff, #8338ec);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideUp 0.8s ease;
+        }
+
+        .hero .subtitle {
+            font-size: 18px;
+            color: var(--accent);
+            margin-bottom: 30px;
+            animation: slideUp 0.8s ease 0.1s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            animation: slideUp 0.8s ease 0.2s both;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 0 30px rgba(255,0,110,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 50px rgba(255,0,110,0.6), 0 0 20px rgba(0,217,255,0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(0,217,255,0.1);
+            color: var(--accent);
+            border: 2px solid rgba(0,217,255,0.5);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0,217,255,0.2);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(0,217,255,0.4);
+        }
+
+        .intro {
+            padding: 60px 30px;
+            background: white;
+            text-align: center;
+        }
+
+        .intro-content {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: slideUp 0.8s ease;
+        }
+
+        .intro h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .intro p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .section {
+            padding: 80px 30px;
+            background: white;
+            margin-top: 20px;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 50px;
+            text-align: center;
+            color: var(--dark);
+            animation: slideUp 0.8s ease;
+        }
+
+        .projects-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, rgba(255,0,110,0.08), rgba(131,56,236,0.08));
+            border: 2px solid rgba(255,0,110,0.2);
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.4s;
+            animation: slideUp 0.8s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px rgba(255,0,110,0.3), 0 0 40px rgba(0,217,255,0.2);
+        }
+
+        .project-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .project-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .skill-category {
+            background: linear-gradient(135deg, rgba(255,0,110,0.1), rgba(131,56,236,0.1));
+            border: 2px solid rgba(255,0,110,0.3);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.4s;
+            animation: slideUp 0.8s ease;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 40px rgba(255,0,110,0.2), 0 0 30px rgba(0,217,255,0.15);
+        }
+
+        .skill-category h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .skill-category ul {
+            list-style: none;
+        }
+
+        .skill-category li {
+            padding: 8px 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .skill-category li::before {
+            content: '▸ ';
+            color: var(--secondary);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .contact-section {
+            background: linear-gradient(-45deg, #0a0a0a, #1a0033, #0a0a0a);
+            background-size: 300% 300%;
+            color: white;
+            padding: 100px 30px;
+            text-align: center;
+            animation: gradient-shift 8s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,0,110,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0,217,255,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .contact-content {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            animation: slideUp 0.8s ease;
+        }
+
+        .contact-content h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff006e, #00d9ff, #8338ec);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .contact-link {
+            display: inline-block;
+            padding: 12px 25px;
+            background: rgba(0,217,255,0.1);
+            border: 2px solid rgba(0,217,255,0.5);
+            border-radius: 50px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .contact-link:hover {
+            background: rgba(0,217,255,0.2);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(0,217,255,0.4);
+            transform: translateY(-3px);
+        }
+
+        .address {
+            margin-top: 30px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        footer {
+            background: #000;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            font-size: 12px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 25px;
+            border: 2px solid var(--border, #e5e5e5);
+            background: white;
+            color: #1a1a1a;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 42px; }
+            .nav-menu { gap: 20px; font-size: 12px; }
+            .section-title { font-size: 28px; }
+            .projects-container { grid-template-columns: 1fr; }
+            .skills-container { grid-template-columns: 1fr; }
+            .cta-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo" onclick="showPage('accueil')">AP</div>
+            <ul class="nav-menu">
+                <li><button class="active" onclick="showPage('accueil', this)">Accueil</button></li>
+                <li><button onclick="showPage('projets', this)">Projets</button></li>
+                <li><button onclick="showPage('competences', this)">Compétences</button></li>
+                <li><button onclick="showPage('contact', this)">Contact</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ACCUEIL -->
+    <div id="accueil" class="page active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Anselme Philippeau</h1>
+                <p class="subtitle">Étudiant BUT GEII </p>
+                <div class="cta-buttons">
+                    <button class="btn btn-secondary" onclick="showPage('contact')">Me contacter</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="intro">
+            <div class="intro-content">
+                <h2>À propos de moi</h2>
+                <p>
+                    Étudiant en BUT Génie Électrique Informatique Industrielle à l'IUT Université de Toulouse. 
+                    Passionné par les systèmes embarqués, les drones et l'électronique. 
+                </p>
+                <h3 style="margin-top: 30px; color: var(--primary);">Qualités</h3>
+                <p>Autodidacte • Persévérant • Organisé et rigoureux • Curieux et passionné</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROJETS -->
+    <div id="projets" class="page">
+        <div class="section">
+            <h2 class="section-title">Mes Projets</h2>
+            
+
+            <div class="projects-container">
+                <!-- Projets Universitaires -->
+                <div class="project-card" data-category="universitaires">
+                    <h3>Smart Car</h3>
+                    <p>Développement d'une voiture intelligente avec systèmes de contrôle avancés, gestion de l'énergie et interfaces de communication.</p>
+                </div>
+
+                <div class="project-card" data-category="universitaires">
+                    <h3>Chaîne de Production</h3>
+                    <p>Étude, dimensionnement et tests d'une chaîne de production industrielle automatisée avec programmation et optimisation.</p>
+                </div>
+
+                <div class="project-card" data-category="universitaires">
+                    <h3>Tourelle Stabilisée</h3>
+                    <p>Conception d'une tourelle 2-axes avec systèmes de commande avancés, stabilisation et asservissement de position.</p>
+                </div>
+
+                <div class="project-card" data-category="universitaires">
+                    <h3>Électrocardiographe</h3>
+                    <p>Acquisition et traitement de signaux biomédicaux avec interface de visualisation temps réel et stockage des données.</p>
+                </div>
+
+                <!-- Projets Personnels -->
+                <div class="project-card" data-category="personnels">
+                    <h3>Drone FPV 5 pouces</h3>
+                    <p>Construction complète d'un drone FPV freestyle avec assemblage électronique, programmation et optimisation des performances.</p>
+                </div>
+
+                <div class="project-card" data-category="personnels">
+                    <h3>Châssis Drone Freestyle</h3>
+                    <p>Conception et impression 3D d'un châssis optimisé pour drones FPV avec modélisation Solidworks et tests de vol.</p>
+                </div>
+
+                <div class="project-card" data-category="personnels">
+                    <h3>Installation Caméras</h3>
+                    <p>Installation et configuration de systèmes de surveillance avec caméras, stockage cloud et monitoring à distance.</p>
+                </div>
+
+                <div class="project-card" data-category="personnels">
+                    <h3>Drone Relais (En cours)</h3>
+                    <p>Développement d'un drone relai avec transmission de signal, alimentation optimisée et système de commande autonome.</p>
+                </div>
+
+                <div class="project-card" data-category="personnels">
+                    <h3>Rénovations Véhicules</h3>
+                    <p>Restauration complète de véhicules de collection : mécanique, électricité, carrosserie, soudure et finitions.</p>
+                </div>
+
+                <div class="project-card" data-category="personnels">
+                    <h3>Domotique - Volet Roulant</h3>
+                    <p>Automation d'un volet roulant avec câblage électrique, programmation et système de contrôle automatisé.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPÉTENCES -->
+    <div id="competences" class="page">
+        <div class="section">
+            <h2 class="section-title">Compétences Techniques</h2>
+            
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Électronique</h3>
+                    <ul>
+                        <li>Proteus CAO</li>
+                        <li>Conception circuits</li>
+                        <li>PCB Design</li>
+                        <li>Systèmes embarqués</li>
+                    </ul>q
+                </div>
+
+                <div class="skill-category">
+                    <h3>Informatique</h3>
+                    <ul>
+                        <li>Visual Studio Code</li>
+                        <li>Programmation embarquée</li>
+                        <li>Algorithmes</li>
+                        <li>C/C++, Python</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Automatisme</h3>
+                    <ul>
+                        <li>Tia Portal</li>
+                        <li>Programmation Ladder</li>
+                        <li>Schémas commande</li>
+                        <li>Automates programmables</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Modélisation 3D</h3>
+                    <ul>
+                        <li>Solidworks</li>
+                        <li>Impression 3D</li>
+                        <li>UltiMaker Cura</li>
+                        <li>Design itératif</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Mécanique</h3>
+                    <ul>
+                        <li>Étude de projet</li>
+                        <li>Dimensionnement</li>
+                        <li>Soudure</li>
+                        <li>Usinage</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Autres</h3>
+                    <ul>
+                        <li>Gestion de projet (Cycle V)</li>
+                        <li>Gant Project</li>
+                        <li>Anglais C1</li>
+                        <li>Communication</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div id="contact" class="page">
+        <div class="contact-section">
+            <div class="contact-content">
+                <h2> Me contacter</h2>
+                
+                <div class="contact-links">
+                    <a href="mailto:anselme.philippeau@etu.iut-tlse3.fr" class="contact-link">📧 Email</a>
+                    <a href="tel:+33768833683" class="contact-link">📱 +33 7 68 83 36 83</a>
+                    <a href="https://www.instagram.com" target="_blank" class="contact-link">Instagram</a>
+                    <a href="https://www.linkedin.com" target="_blank" class="contact-link">LinkedIn</a>
+                </div>
+                
+                <div class="address">
+                    <p><strong>Localisation</strong><br>
+                    143 impasse de Pelloubi<br>
+                    31790 Saint-Sauveur<br>
+                    Toulouse, France</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy;  Anselme Philippeau. | Portfolio professionnel</p>
+    </footer>
+
+    <script>
+        function showPage(pageName, element) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageName).classList.add('active');
+            
+            document.querySelectorAll('.nav-menu button').forEach(btn => btn.classList.remove('active'));
+            if (element) element.classList.add('active');
+            
+            window.scrollTo(0, 0);
+        }
+
+        function filterProjects(category) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.project-card').forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    setTimeout(() => card.style.opacity = '1', 10);
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
